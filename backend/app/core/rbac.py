@@ -1,0 +1,69 @@
+from app.models.role import Role
+from app.models.permission import Permission
+from app.extensions import db
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+def initialize_rbac(school_id):
+    """Initialize default RBAC for a school"""
+    try:
+        # Create default roles
+        admin_role = Role.query.filter_by(school_id=school_id, name="Admin").first()
+        if not admin_role:
+            admin_role = Role(school_id=school_id, name="Admin")
+            db.session.add(admin_role)
+        
+        teacher_role = Role.query.filter_by(school_id=school_id, name="Teacher").first()
+        if not teacher_role:
+            teacher_role = Role(school_id=school_id, name="Teacher")
+            db.session.add(teacher_role)
+        
+        student_role = Role.query.filter_by(school_id=school_id, name="Student").first()
+        if not student_role:
+            student_role = Role(school_id=school_id, name="Student")
+            db.session.add(student_role)
+        
+        db.session.commit()
+        
+        # Create default permissions
+        permissions = [
+            "view_students",
+            "create_student",
+            "edit_student",
+            "delete_student",
+            "view_dashboard"
+        ]
+        
+        for perm_name in permissions:
+            perm = Permission.query.filter_by(name=perm_name).first()
+            if not perm:
+                perm = Permission(name=perm_name)
+                db.session.add(perm)
+        
+        db.session.commit()
+        
+        # Assign all permissions to Admin role
+        admin_perms = Permission.query.all()
+        admin_role.permissions = admin_perms
+        db.session.commit()
+        
+        logger.info(f"RBAC initialized for school {school_id}")
+        return True
+    except Exception as e:
+        logger.error(f"RBAC initialization error: {str(e)}")
+        db.session.rollback()
+        return False
+
+
+def has_permission(user, permission_name):
+    """Check if user has specific permission"""
+    if not user.role:
+        return False
+    
+    permission = Permission.query.filter_by(name=permission_name).first()
+    if not permission:
+        return False
+    
+    return permission in user.role.permissions

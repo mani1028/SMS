@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management - School Management System</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header>
+        <div class="container">
+            <div class="logo">📚 School MS</div>
+            <nav>
+                <ul>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="students.html">Students</a></li>
+                    <li><a href="#" onclick="logout()">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <ul>
+                    <li><a href="dashboard.html">📊 Dashboard</a></li>
+                    <li><a href="students.html" class="active">👥 Students</a></li>
+                    <li><a href="#" onclick="logout()">🚪 Logout</a></li>
+                </ul>
+            </aside>
+            
+            <!-- Students Content -->
+            <main>
+                <div id="message"></div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h1>Student Management</h1>
+                    <button class="btn btn-primary" onclick="openStudentModal()">+ Add Student</button>
+                </div>
+                
+                <!-- Students Table -->
+                <div class="card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Admission No.</th>
+                                <th>Class</th>
+                                <th>Email</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody">
+                            <tr>
+                                <td colspan="6" class="text-center">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination" id="pagination"></div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Add/Edit Student Modal -->
+    <div class="modal" id="studentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Student Form</h2>
+                <button class="close" onclick="closeStudentModal()">&times;</button>
+            </div>
+            
+            <form id="studentForm">
+                <input type="hidden" id="studentId" value="">
+                
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="admissionNo">Admission No. *</label>
+                    <input type="text" id="admissionNo" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="className">Class *</label>
+                    <input type="text" id="className" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone">
+                </div>
+                
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn" onclick="closeStudentModal()" style="background-color: #95a5a6; color: white;">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 School Management System. All rights reserved.</p>
+    </footer>
+    
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/student.js"></script>
+</body>
+</html>

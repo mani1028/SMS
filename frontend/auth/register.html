@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Management System - Register</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/forms.css">
+</head>
+<body>
+    <div class="login-container">
+        <form class="login-form" id="registerForm">
+            <h1>📚 School MS</h1>
+            <p class="text-center text-muted">Register Your School</p>
+            
+            <div id="message"></div>
+            
+            <div class="form-group">
+                <label for="schoolName">School Name</label>
+                <input type="text" id="schoolName" name="schoolName" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="schoolEmail">School Email</label>
+                <input type="email" id="schoolEmail" name="schoolEmail" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="adminName">Admin Name</label>
+                <input type="text" id="adminName" name="adminName" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="adminEmail">Admin Email</label>
+                <input type="email" id="adminEmail" name="adminEmail" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="adminPassword">Admin Password</label>
+                <input type="password" id="adminPassword" name="adminPassword" required>
+            </div>
+            
+            <button type="submit" class="login-btn">Register School</button>
+            
+            <div class="form-footer">
+                <p>Already registered? <a href="login.html">Login here</a></p>
+            </div>
+        </form>
+    </div>
+    
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/auth.js"></script>
+</body>
+</html>
