@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
-from app.extensions import db, jwt
+from flask_cors import CORS
+from app.extensions import db, jwt, migrate
 from app.config import Config
 import logging
 
@@ -11,21 +12,32 @@ def create_app(config_class=Config):
     """Application Factory Pattern"""
     app = Flask(__name__)
     app.config.from_object(config_class)
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
     
     # Initialize extensions
     db.init_app(app)
     jwt.init_app(app)
+    migrate.init_app(app, db)
     
     with app.app_context():
-        # Create tables
+        # Ensure models are imported so SQLAlchemy can create tables
+        from app.models import school, user, role, permission, student, activity, parent, staff
+
+        # Create tables if they don't exist
         db.create_all()
         
         # Register blueprints
         from app.routes.auth_routes import auth_bp
         from app.routes.student_routes import student_bp
+        from app.routes.parent_routes import parent_bp
+        from app.routes.staff_routes import staff_bp
+        from app.routes.dashboard_routes import dashboard_bp
         
         app.register_blueprint(auth_bp, url_prefix="/api")
         app.register_blueprint(student_bp, url_prefix="/api")
+        app.register_blueprint(parent_bp, url_prefix="/api")
+        app.register_blueprint(staff_bp, url_prefix="/api")
+        app.register_blueprint(dashboard_bp, url_prefix="/api")
         
         # ADDED: A friendly health-check route for the root URL
         @app.route('/')

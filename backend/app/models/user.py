@@ -16,6 +16,12 @@ class User(BaseModel):
     
     # Relationships
     role = db.relationship('Role', backref='users')
+    staff_profile = db.relationship(
+        'Staff',
+        backref='user',
+        uselist=False,
+        cascade='all, delete-orphan'
+    )
     
     # Unique constraint on email per school
     __table_args__ = (db.UniqueConstraint('school_id', 'email', name='uq_school_email'),)

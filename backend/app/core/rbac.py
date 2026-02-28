@@ -33,7 +33,18 @@ def initialize_rbac(school_id):
             "create_student",
             "edit_student",
             "delete_student",
-            "view_dashboard"
+            "view_parent",
+            "create_parent",
+            "edit_parent",
+            "view_staff",
+            "create_staff",
+            "edit_staff",
+            "manage_staff_attendance",
+            "manage_staff_leaves",
+            "view_dashboard",
+            "view_reports",
+            "manage_users",
+            "manage_roles"
         ]
         
         for perm_name in permissions:

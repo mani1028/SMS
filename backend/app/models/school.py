@@ -14,6 +14,8 @@ class School(BaseModel):
     users = db.relationship('User', backref='school', cascade='all, delete-orphan')
     roles = db.relationship('Role', backref='school', cascade='all, delete-orphan')
     students = db.relationship('Student', backref='school', cascade='all, delete-orphan')
+    parents = db.relationship('Parent', backref='school', cascade='all, delete-orphan')
+    staff_members = db.relationship('Staff', backref='school', cascade='all, delete-orphan')
     
     def to_dict(self):
         data = super().to_dict()
