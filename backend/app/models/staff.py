@@ -45,7 +45,7 @@ class Staff(BaseModel):
         cascade='all, delete-orphan'
     )
     leave_requests = db.relationship(
-        'LeaveRequest',
+        'app.models.staff.LeaveRequest',
         backref='staff',
         lazy='dynamic',
         cascade='all, delete-orphan'
@@ -143,7 +143,7 @@ class StaffAttendance(BaseModel):
 
 class LeaveRequest(BaseModel):
     """Leave request for a staff member."""
-    __tablename__ = 'leave_requests'
+    __tablename__ = 'staff_leave_requests'
 
     school_id = db.Column(db.Integer, db.ForeignKey('schools.id'), nullable=False)
     staff_id = db.Column(db.Integer, db.ForeignKey('staff.id'), nullable=False)

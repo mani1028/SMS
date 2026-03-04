@@ -4,14 +4,15 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(BaseModel):
-    """User model - Multi-tenant"""
+    """User model - Multi-tenant with Super Admin support"""
     __tablename__ = 'users'
     
-    school_id = db.Column(db.Integer, db.ForeignKey('schools.id'), nullable=False)
+    school_id = db.Column(db.Integer, db.ForeignKey('schools.id'), nullable=True)  # NULL for super admin
     name = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), nullable=False, unique=True)  # Globally unique for platform
     password_hash = db.Column(db.String(500), nullable=False)
     is_active = db.Column(db.Boolean, default=True)
+    is_super_admin = db.Column(db.Boolean, default=False)  # Platform-wide admin
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=True)
     
     # Relationships
@@ -23,7 +24,7 @@ class User(BaseModel):
         cascade='all, delete-orphan'
     )
     
-    # Unique constraint on email per school
+    # Unique constraint on email per school (but allow super admin with NULL school)
     __table_args__ = (db.UniqueConstraint('school_id', 'email', name='uq_school_email'),)
     
     def set_password(self, password):
@@ -41,7 +42,9 @@ class User(BaseModel):
             'name': self.name,
             'email': self.email,
             'is_active': self.is_active,
-            'role': self.role.to_dict() if self.role else None
+            'is_super_admin': self.is_super_admin,
+            'role': self.role.to_dict() if self.role else None,
+            'role_name': self.role.name if self.role else ('Super Admin' if self.is_super_admin else 'No Role')
         })
         return data
     

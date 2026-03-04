@@ -13,6 +13,8 @@ class ActivityType(Enum):
     ROLE_CREATED = "role_created"
     REPORT_GENERATED = "report_generated"
     DATA_EXPORTED = "data_exported"
+    SCHOOL_CREATED = "school_created"
+    SCHOOL_UPDATED = "school_updated"
 
 
 class Activity(BaseModel):

@@ -78,3 +78,51 @@ def has_permission(user, permission_name):
         return False
     
     return permission in user.role.permissions
+
+
+def permission_required(permission_name):
+    """Decorator to require specific permission for a route"""
+    from functools import wraps
+    from flask import jsonify
+    from app.core.auth import token_required
+    
+    def decorator(f):
+        @wraps(f)
+        @token_required
+        def decorated_function(current_user, *args, **kwargs):
+            if not has_permission(current_user, permission_name):
+                return jsonify({
+                    'success': False,
+                    'message': f'Permission denied: {permission_name} required'
+                }), 403
+            return f(current_user, *args, **kwargs)
+        return decorated_function
+    return decorator
+
+
+def requires_roles(*role_names):
+    """Decorator to require specific roles for a route"""
+    from functools import wraps
+    from flask import jsonify
+    from app.core.auth import token_required
+    
+    def decorator(f):
+        @wraps(f)
+        @token_required
+        def decorated_function(current_user, *args, **kwargs):
+            # Allow superadmin even if no role object
+            if getattr(current_user, 'is_super_admin', False):
+                return f(current_user, *args, **kwargs)
+            if not current_user.role:
+                return jsonify({
+                    'success': False,
+                    'message': 'User has no role assigned'
+                }), 403
+            if current_user.role.name not in role_names:
+                return jsonify({
+                    'success': False,
+                    'message': f'Access denied. Required roles: {", ".join(role_names)}'
+                }), 403
+            return f(current_user, *args, **kwargs)
+        return decorated_function
+    return decorator

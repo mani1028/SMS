@@ -77,6 +77,30 @@ class AuthService:
             return {"success": False, "error": str(e)}
     
     @staticmethod
+    def super_admin_login(email, password):
+        """Super admin authentication (not school-scoped)"""
+        try:
+            user = User.query.filter_by(
+                email=email,
+                is_super_admin=True,
+                is_active=True
+            ).first()
+            
+            if not user or not user.check_password(password):
+                return {"success": False, "error": "Invalid super admin credentials"}
+            
+            logger.info(f"Super admin logged in: {email}")
+            return {
+                "success": True,
+                "user_id": user.id,
+                "user": user.to_dict(),
+                "message": "Super admin login successful"
+            }
+        except Exception as e:
+            logger.error(f"Super admin login error: {str(e)}")
+            return {"success": False, "error": str(e)}
+    
+    @staticmethod
     def verify_user(user_id, school_id):
         """Verify user belongs to school"""
         user = User.query.filter_by(id=user_id, school_id=school_id).first()

@@ -9,6 +9,9 @@ class School(BaseModel):
     name = db.Column(db.String(255), nullable=False, unique=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
     subscription_status = db.Column(db.String(50), default="active")
+    logo_url = db.Column(db.String(255))
+    primary_color = db.Column(db.String(20))
+    custom_domain = db.Column(db.String(255))
     
     # Relationships
     users = db.relationship('User', backref='school', cascade='all, delete-orphan')
@@ -22,7 +25,10 @@ class School(BaseModel):
         data.update({
             'name': self.name,
             'email': self.email,
-            'subscription_status': self.subscription_status
+            'subscription_status': self.subscription_status,
+            'logo_url': self.logo_url,
+            'primary_color': self.primary_color,
+            'custom_domain': self.custom_domain
         })
         return data
     

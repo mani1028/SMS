@@ -2,12 +2,14 @@ from flask import Blueprint
 from app.services.dashboard_service import DashboardService
 from app.services.activity_service import ActivityService
 from app.core.response import success_response, error_response
-from app.core.auth import token_required
+from app.core.auth import token_required, permission_required
+from app.core.middleware import admin_required
 
 dashboard_bp = Blueprint('dashboard', __name__)
 
 @dashboard_bp.route('/dashboard/stats', methods=['GET'])
 @token_required
+@permission_required('view_dashboard')
 def get_dashboard_stats(current_user):
     """Get dashboard statistics for the logged-in user's school"""
     try:
@@ -24,6 +26,7 @@ def get_dashboard_stats(current_user):
 
 @dashboard_bp.route('/dashboard/full', methods=['GET'])
 @token_required
+@permission_required('view_dashboard')
 def get_full_dashboard(current_user):
     """Get comprehensive dashboard data including charts, trends, and activity"""
     try:
@@ -40,6 +43,7 @@ def get_full_dashboard(current_user):
 
 @dashboard_bp.route('/dashboard/trends', methods=['GET'])
 @token_required
+@permission_required('view_dashboard')
 def get_enrollment_trends(current_user):
     """Get enrollment trends for the past 30 days"""
     try:
@@ -56,6 +60,7 @@ def get_enrollment_trends(current_user):
 
 @dashboard_bp.route('/dashboard/classes', methods=['GET'])
 @token_required
+@permission_required('view_dashboard')
 def get_class_distribution(current_user):
     """Get student distribution by class"""
     try:
@@ -72,6 +77,7 @@ def get_class_distribution(current_user):
 
 @dashboard_bp.route('/dashboard/monthly', methods=['GET'])
 @token_required
+@permission_required('view_dashboard')
 def get_monthly_stats(current_user):
     """Get monthly activity statistics"""
     try:
@@ -88,6 +94,7 @@ def get_monthly_stats(current_user):
 
 @dashboard_bp.route('/dashboard/seed-activities', methods=['POST'])
 @token_required
+@admin_required
 def seed_sample_activities(current_user):
     """Create sample activities for demo/testing purposes (Admin only)"""
     try:

@@ -14,6 +14,7 @@ student_bp = Blueprint('student', __name__)
 
 @student_bp.route('/students', methods=['GET'])
 @token_required
+@permission_required('view_students')
 def get_students(current_user):
     """Get all students for a school (with pagination)"""
     try:
@@ -53,6 +54,7 @@ def get_students(current_user):
 
 @student_bp.route('/students/<int:student_id>', methods=['GET'])
 @token_required
+@permission_required('view_students')
 def get_student(current_user, student_id):
     """Get a specific student"""
     try:
@@ -226,6 +228,7 @@ def delete_student(current_user, student_id):
 
 @student_bp.route('/students/<int:student_id>/profile', methods=['GET'])
 @token_required
+@permission_required('view_student_profile', 'view_students')
 def get_student_profile(current_user, student_id):
     """Get comprehensive student profile with all relations"""
     try:
